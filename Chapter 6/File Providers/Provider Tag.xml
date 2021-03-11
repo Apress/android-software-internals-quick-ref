@@ -1,0 +1,10 @@
+In setting up a FileProvider add a provider tag to the application's manifest file application tag that follows the format of the below bearing in mind to change the package name.
+<provider
+    android:name="androidx.core.content.FileProvider"
+    android:authorities="com.example.storage.fileprovider"
+    android:grantUriPermissions="true"
+    android:exported="false">
+    <meta-data
+        android:name="android.support.FILE_PROVIDER_PATHS"
+        android:resource="@xml/filepaths" />
+</provider>

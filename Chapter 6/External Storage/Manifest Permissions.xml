@@ -1,0 +1,3 @@
+The below is an example of setting manifest permissions:
+<uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+<uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />

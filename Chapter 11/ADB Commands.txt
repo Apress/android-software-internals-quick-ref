@@ -1,0 +1,88 @@
+The below are several examples of basic device input via the shell.
+input text "Hello World"
+input swipe 50 050 450 100 #coordinates for swipe action
+input tap 466 17 #coordinates for tap
+service call phone 1 s16 098765432
+service call statusbar 1
+service call statusbar 2
+
+Requiring root the below displays the boot image above all other activities. This does not stop activities from running in the foreground behind the animation.
+/system/bin/bootanimation
+
+Control system properties via the svc command (requires root).
+svc -l
+svc bluetooth enable/ disable
+svc wifi enable/ disable
+svc nfc enable/ disable
+svc data enable/ disable
+svc power reboot
+svc power shutdown
+svc power stayon true #[true|false|usb|ac|wireless]
+svc usb getFunctions [function] #Possible values of [function] are any of 'mtp', 'ptp', 'rndis', 'midi'
+
+The screencap command takes a photo of the screen and saves it to a location on device. Similarly the screenrecord command records the screen for a maximum of 3 minutes and saves it to disk.
+screencap -p /sdcard/screen.png
+screenrecord /sdcard/MyVideo.mp4
+
+List all running processes
+top
+top | grep chrome
+
+Install an application on the device, requires root. The -g permission accepts all runtime permission without user interaction (This option didn't exist prior to Android 6.0 as neither did runtime permissions).
+pm install -g /data/local/tmp/one.apk
+
+Return a list of the input devices available on the device. This can include: audio buttons, power button, touch screen, fingerprint reader, and a mouse.
+uinput-fpc - Finger print sensor
+fts - screen
+gpio-keys - volume button
+qpnp_pon - volume / power buttons
+ls /dev/input/ -l
+lsof | grep input/event
+# or get the name of the inputs and see when an event occurs on that input
+getevent -l
+# Return feedback if an input is in use. Useful for identifying if the screen is in use.
+cat /dev/input/event2
+# Send an event to one of these inputs. For example on my device the below sets the volume to 0.
+sendevent /dev/input/event0 0 0 0
+
+Start an application via the Monkey testing tool (A UI fuzzer). Replace the number 1 with the number of random touch inputs to perform as part of the test.
+monkey -p com.android.chrome 1
+
+If you know the activity name you can start the application with activity manager instead.
+am start -n com.android.chrome/com.google.android.apps.chrome.Main
+
+The below returns the manufacturer, device name, version, name and date, as well as user and release keys.
+getprop ro.build.fingerprint # google/blueline/blueline:9/PQ3A.190605.003/5524043:user/release-keys
+# Returns the kernel version
+uname -a
+# Also returns the kernel version as well as the device architecture.
+cat /proc/version
+
+Access an application’s internal storage (requires root):
+#As Root access the locations used by applications as their internal storage.
+cd /data/user/0
+# For example accessing the saved offline pages in Chrome and storing it in the data/local/tmp directory for it to be pulled off device later.
+su
+cd /data/user/0
+cd com.android.chrome/cache/Offline Pages/archives
+cp 91-a05c-b3f3384516f4.mhtml /data/local/tmp/page.mhtml
+chmod 777 /data/local/tmp/page.mhtml
+
+Reboot the device. As an application requires the android.permission.REBOOT permission or to be root.
+/system/bin/reboot
+reboot
+svc power reboot
+svc power shutdown
+
+As root mount a file system as read-write. On older devices this can be used for setting the
+system apps directory to read-write.
+busybox mount -o remount,rw /system
+
+Interrupts allow interface devices to communicate with the processors.
+cat /proc/interrupts | grep volume
+
+Dumpsys provides information on system services.
+dumpsys -l
+dumpsys input
+dumpsys meminfo
+service call procstats 1

@@ -1,0 +1,26 @@
+Example Rules:
+In the below example the Java package name is java_dexloadable and all rules have been added to the Proguard-rules.pro file.
+
+Keeps (Whitelists) all methods in the MainActivity class.
+-keep class com.example.java_dexloadable.MainActivity {
+   public *;
+}
+
+Keeps (Whitelists) the showString function in the MainActivity class as well as the MainActivity class itself.
+-keep class com.example.java_dexloadable.MainActivity {
+   public showString(android.content.Context, int);
+}
+
+Keeps (Whitelists) everything under the top level package (Shouldn't be used).
+-keep class com.example.java_dexloadable.** { *; }
+
+Keeps (Whitelists) the function stringGetter but not the class StringsClass itself.
+-keepclassmembers class com.example.java_dexloadable.StringsClass {
+   public stringGetter(int);
+}
+
+Repackage whole package into a single root
+-repackageclasses
+
+Doesn't perform the ProGuard shrink step
+--dontshrink
